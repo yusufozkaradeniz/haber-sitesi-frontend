@@ -24,9 +24,9 @@ function App() {
   const [haberGuncellemeTetikleyici, setHaberGuncellemeTetikleyici] = useState(0); 
 
   const t = tercumeler[dil];
-  const API_URL = 'http://localhost:8080/api/reklamlar';
-  const BILDIRIM_URL = 'http://localhost:8080/api/bildirimler';
-  const HABER_API_URL = 'http://localhost:8080/api/haberler';
+  const API_URL = 'https://habersitesi-backend.onrender.com/api/reklamlar';
+  const BILDIRIM_URL = 'https://habersitesi-backend.onrender.com/api/bildirimler';
+  const HABER_API_URL = 'https://habersitesi-backend.onrender.com/api/haberler';
 
   useEffect(() => {
     const kayitliKullanici = localStorage.getItem('haberSitesiKullanici');
