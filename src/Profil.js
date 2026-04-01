@@ -17,7 +17,7 @@ function Profil({ dil }) {
             setFormData(aktifKullanici);
 
             // 2. ADIM: Arka planda internetten (backend) güncel halini çek
-            axios.get(`http://localhost:8080/api/kullanici/${aktifKullanici.id}`)
+            axios.get(`https://habersitesi-backend.onrender.com/api/kullanici/${aktifKullanici.id}`)
                 .then(res => {
                     setUser(res.data);
                     setFormData(res.data);
@@ -28,7 +28,7 @@ function Profil({ dil }) {
     }, []);
 
     const handleUpdate = () => {
-        axios.put(`http://localhost:8080/api/kullanici/${user.id}`, formData)
+        axios.put(`https://habersitesi-backend.onrender.com/api/kullanici/${user.id}`, formData)
             .then((res) => {
                 setIsEditing(false);
                 setUser(res.data);
