@@ -8,7 +8,7 @@ const Kayit = ({ girisEkraninaDon }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/kullanici/kayit', form);
+            await axios.post('https://habersitesi-backend.onrender.com/api/kullanici/kayit', form);
             setMesaj({ tip: 'basari', icerik: '✅ Kayıt başarılı! Giriş yapabilirsiniz.' });
             setTimeout(() => girisEkraninaDon(), 2000);
         } catch (err) {
