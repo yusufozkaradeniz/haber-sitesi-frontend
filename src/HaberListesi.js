@@ -52,10 +52,10 @@ const HaberListesi = ({ dil, tetikleyici }) => {
     // --- 📌 KAYDEDİLENLER ÇEVİRİ VE YÜKLEME ---
     const kaydedilenleriGetir = useCallback(async () => {
         try {
-            const kullaniciRes = await axios.get('http://localhost:8080/api/kullanici');
+            const kullaniciRes = await axios.get('https://habersitesi-backend.onrender.com/api/kullanici');
             if (kullaniciRes.data.length > 0) {
                 const aktifId = kullaniciRes.data[0].id;
-                const res = await axios.get(`http://localhost:8080/api/kullanici/${aktifId}/kaydedilenler`);
+                const res = await axios.get(`https://habersitesi-backend.onrender.com/api/kullanici/${aktifId}/kaydedilenler`);
                 const hamKaydedilenler = res.data;
 
                 if (dil === 'tr') {
@@ -79,7 +79,7 @@ const HaberListesi = ({ dil, tetikleyici }) => {
     const verileriGetirveCevir = useCallback(async () => {
         setYukleniyor(true);
         try {
-            const res = await axios.get('http://localhost:8080/api/haberler');
+            const res = await axios.get('https://habersitesi-backend.onrender.com/api/haberler');
             const hamHaberler = res.data.sort((a, b) => a.id - b.id);
 
             if (dil === 'tr') {
@@ -96,7 +96,7 @@ const HaberListesi = ({ dil, tetikleyici }) => {
             }
 
             hamHaberler.forEach(async (h) => {
-                const yRes = await axios.get(`http://localhost:8080/api/yorumlar/haber/${h.id}`);
+                const yRes = await axios.get(`https://habersitesi-backend.onrender.com/api/yorumlar/haber/${h.id}`);
                 let yorumVerisi = yRes.data;
 
                 if (dil !== 'tr') {
@@ -124,7 +124,7 @@ const HaberListesi = ({ dil, tetikleyici }) => {
 
     const haberSil = (id) => {
         if (window.confirm(dil === 'tr' ? "Haberi silmek istediğine emin misin?" : "Are you sure?")) {
-            axios.delete(`http://localhost:8080/api/haberler/${id}`)
+            axios.delete(`https://habersitesi-backend.onrender.com/api/haberler/${id}`)
                 .then(() => {
                     setHaberler(prev => prev.filter(h => h.id !== id));
                     setOkumaGecmisi(prev => prev.filter(h => h.id !== id));
@@ -135,9 +135,9 @@ const HaberListesi = ({ dil, tetikleyici }) => {
 
     const yorumSil = (yorumId, haberId) => {
         if (window.confirm(dil === 'tr' ? "Bu yorumu silmek istediğine emin misin?" : "Delete this comment?")) {
-            axios.delete(`http://localhost:8080/api/yorumlar/${yorumId}`)
+            axios.delete(`https://habersitesi-backend.onrender.com/api/yorumlar/${yorumId}`)
                 .then(() => {
-                    axios.get(`http://localhost:8080/api/yorumlar/haber/${haberId}`)
+                    axios.get(`https://habersitesi-backend.onrender.com/api/yorumlar/haber/${haberId}`)
                         .then(res => setYorumlar(prev => ({ ...prev, [haberId]: res.data })));
                 })
                 .catch(err => console.log("Yorum silme hatası:", err));
@@ -145,7 +145,7 @@ const HaberListesi = ({ dil, tetikleyici }) => {
     };
 
     const begen = (id) => {
-        axios.post(`http://localhost:8080/api/haberler/${id}/begen`)
+        axios.post(`https://habersitesi-backend.onrender.com/api/haberler/${id}/begen`)
             .then(() => {
                 verileriGetirveCevir();
                 alert(dil === 'tr' ? "Beğenildi!" : "Liked!");
@@ -155,10 +155,10 @@ const HaberListesi = ({ dil, tetikleyici }) => {
 
     const haberKaydet = async (haberId) => {
         try {
-            const kullaniciRes = await axios.get('http://localhost:8080/api/kullanici');
+            const kullaniciRes = await axios.get('https://habersitesi-backend.onrender.com/api/kullanici');
             if (kullaniciRes.data.length > 0) {
                 const aktifId = kullaniciRes.data[0].id;
-                await axios.post(`http://localhost:8080/api/kullanici/${aktifId}/kaydet/${haberId}`);
+                await axios.post(`https://habersitesi-backend.onrender.com/api/kullanici/${aktifId}/kaydet/${haberId}`);
                 alert(dil === 'tr' ? "Haber kaydedildi! ✅" : "News saved! ✅");
                 kaydedilenleriGetir(); 
             }
@@ -169,10 +169,10 @@ const HaberListesi = ({ dil, tetikleyici }) => {
 
     const kaydedilenSil = async (haberId) => {
         try {
-            const kullaniciRes = await axios.get('http://localhost:8080/api/kullanici');
+            const kullaniciRes = await axios.get('https://habersitesi-backend.onrender.com/api/kullanici');
             if (kullaniciRes.data.length > 0) {
                 const aktifId = kullaniciRes.data[0].id;
-                await axios.delete(`http://localhost:8080/api/kullanici/${aktifId}/kaydedilenler/${haberId}`);
+                await axios.delete(`https://habersitesi-backend.onrender.com/api/kullanici/${aktifId}/kaydedilenler/${haberId}`);
                 kaydedilenleriGetir(); 
             }
         } catch (err) {
@@ -182,14 +182,14 @@ const HaberListesi = ({ dil, tetikleyici }) => {
 
     const yorumYap = (haberId) => {
         if (!yorumIcerik[haberId]) return;
-        axios.post(`http://localhost:8080/api/yorumlar`, {
+        axios.post(`https://habersitesi-backend.onrender.com/api/yorumlar`, {
             kullaniciAdi: "Yusuf",
             icerik: yorumIcerik[haberId],
             haberId: haberId
         })
         .then(() => {
             setYorumIcerik(prev => ({ ...prev, [haberId]: "" }));
-            axios.get(`http://localhost:8080/api/yorumlar/haber/${haberId}`)
+            axios.get(`https://habersitesi-backend.onrender.com/api/yorumlar/haber/${haberId}`)
                 .then(res => setYorumlar(prev => ({ ...prev, [haberId]: res.data })));
         })
         .catch(err => console.log("Hata:", err));
