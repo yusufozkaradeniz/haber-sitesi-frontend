@@ -10,7 +10,7 @@ const Giris = ({ onGirisBasarili, sifremiUnuttumAc, kayitEkraninaGec }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8080/api/kullanici/giris', { email, sifre });
+            const res = await axios.post('https://habersitesi-backend.onrender.com/api/kullanici/giris', { email, sifre });
             onGirisBasarili(res.data);
         } catch (err) {
             setHata('E-posta veya şifre hatalı!');
