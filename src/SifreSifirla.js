@@ -14,7 +14,7 @@ const SifreSifirla = ({ kapat }) => {
         setMesaj({ tip: '', icerik: 'İşlem yapılıyor...' });
         try {
             // ✅ Backend'deki @PostMapping("/sifre-sifirla") ile eşitlendi
-            await axios.post('http://localhost:8080/api/kullanici/sifre-sifirla', { email });
+            await axios.post('https://habersitesi-backend.onrender.com/api/kullanici/sifre-sifirla', { email });
             setMesaj({ tip: 'basari', icerik: 'Doğrulama kodu e-postanıza gönderildi!' });
             setAsama(2);
         } catch (err) {
@@ -29,7 +29,7 @@ const SifreSifirla = ({ kapat }) => {
         e.preventDefault();
         try {
             // ✅ Backend'deki parametre isimleriyle (email, kod, sifre) tam uyumlu hale getirildi
-            await axios.post('http://localhost:8080/api/kullanici/sifre-guncelle', { 
+            await axios.post('https://habersitesi-backend.onrender.com/api/kullanici/sifre-guncelle', { 
                 email: email, 
                 kod: kod, 
                 sifre: yeniSifre 
