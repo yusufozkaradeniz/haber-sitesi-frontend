@@ -86,12 +86,11 @@ function App() {
     localStorage.setItem('haberSitesiKullanici', JSON.stringify(data));
   };
 
-  // 🔥 GÜNCELLEME: Çıkış yaparken her şeyi temizliyoruz ve sayfayı tazeliyoruz
   const handleCikis = () => {
     setKullanici(null);
     localStorage.removeItem('haberSitesiKullanici');
     setEkran('giris');
-    window.location.reload(); // Tarayıcıyı tazele ki eski şifre kalıntıları uçsun
+    window.location.reload();
   };
 
   const kaydet = (e) => {
@@ -202,29 +201,32 @@ function App() {
         <Profil dil={dil} /> 
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
-        <div style={{ flex: 1, minWidth: '300px', maxWidth: '600px', padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ marginTop: 0 }}>{form.id ? t.duzenle : t.yeniReklamEkle}</h3>
-          <form onSubmit={kaydet}>
-            <input style={inputStyle} placeholder={t.reklamAdi} value={form.reklamAdi} onChange={e => setForm({...form, reklamAdi: e.target.value})} required />
-            <input style={inputStyle} placeholder={t.reklamLinki} value={form.reklamLinki} onChange={e => setForm({...form, reklamLinki: e.target.value})} />
-            <input style={inputStyle} placeholder={t.gorselUrl} value={form.gorselUrl} onChange={e => setForm({...form, gorselUrl: e.target.value})} />
-            <input style={inputStyle} type="number" placeholder={t.fiyat} value={form.fiyat} onChange={e => setForm({...form, fiyat: e.target.value})} required />
-            <button type="submit" style={form.id ? updateBtnStyle : addBtnStyle}>{form.id ? t.duzenle : t.sistemeEkle}</button>
-            {form.id && <button type="button" onClick={() => setForm({id:null, reklamAdi:'', reklamLinki:'', gorselUrl:'', fiyat:''})} style={cancelBtnStyle}>Vazgeç</button>}
-          </form>
-        </div>
+      {/* 🔥 KRİTİK GÜNCELLEME: Sadece admin (Yusuf) formları görebilir */}
+      {kullanici?.email === "yusufzkrdz@gmail.com" && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+            <div style={{ flex: 1, minWidth: '300px', maxWidth: '600px', padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ marginTop: 0 }}>{form.id ? t.duzenle : t.yeniReklamEkle}</h3>
+            <form onSubmit={kaydet}>
+                <input style={inputStyle} placeholder={t.reklamAdi} value={form.reklamAdi} onChange={e => setForm({...form, reklamAdi: e.target.value})} required />
+                <input style={inputStyle} placeholder={t.reklamLinki} value={form.reklamLinki} onChange={e => setForm({...form, reklamLinki: e.target.value})} />
+                <input style={inputStyle} placeholder={t.gorselUrl} value={form.gorselUrl} onChange={e => setForm({...form, gorselUrl: e.target.value})} />
+                <input style={inputStyle} type="number" placeholder={t.fiyat} value={form.fiyat} onChange={e => setForm({...form, fiyat: e.target.value})} required />
+                <button type="submit" style={form.id ? updateBtnStyle : addBtnStyle}>{form.id ? t.duzenle : t.sistemeEkle}</button>
+                {form.id && <button type="button" onClick={() => setForm({id:null, reklamAdi:'', reklamLinki:'', gorselUrl:'', fiyat:''})} style={cancelBtnStyle}>Vazgeç</button>}
+            </form>
+            </div>
 
-        <div style={{ flex: 1, minWidth: '300px', maxWidth: '600px', padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ marginTop: 0, color: '#1a73e8' }}>{dil === 'tr' ? '📣 Yeni Haber Ekle' : '📣 Add New News'}</h3>
-          <form onSubmit={haberKaydet}>
-            <input style={inputStyle} placeholder={dil === 'tr' ? "Haber Başlığı" : "News Title"} value={haberForm.baslik} onChange={e => setHaberForm({...haberForm, baslik: e.target.value})} required />
-            <textarea style={{...inputStyle, height: '80px'}} placeholder={dil === 'tr' ? "Haber İçeriği" : "News Content"} value={haberForm.icerik} onChange={e => setHaberForm({...haberForm, icerik: e.target.value})} required />
-            <input style={inputStyle} placeholder={dil === 'tr' ? "Görsel URL" : "Image URL"} value={haberForm.gorselUrl} onChange={e => setHaberForm({...haberForm, gorselUrl: e.target.value})} />
-            <button type="submit" style={{...addBtnStyle, backgroundColor: '#1a73e8'}}>{dil === 'tr' ? 'Haberi Yayınla' : 'Publish News'}</button>
-          </form>
+            <div style={{ flex: 1, minWidth: '300px', maxWidth: '600px', padding: '20px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ marginTop: 0, color: '#1a73e8' }}>{dil === 'tr' ? '📣 Yeni Haber Ekle' : '📣 Add New News'}</h3>
+            <form onSubmit={haberKaydet}>
+                <input style={inputStyle} placeholder={dil === 'tr' ? "Haber Başlığı" : "News Title"} value={haberForm.baslik} onChange={e => setHaberForm({...haberForm, baslik: e.target.value})} required />
+                <textarea style={{...inputStyle, height: '80px'}} placeholder={dil === 'tr' ? "Haber İçeriği" : "News Content"} value={haberForm.icerik} onChange={e => setHaberForm({...haberForm, icerik: e.target.value})} required />
+                <input style={inputStyle} placeholder={dil === 'tr' ? "Görsel URL" : "Image URL"} value={haberForm.gorselUrl} onChange={e => setHaberForm({...haberForm, gorselUrl: e.target.value})} />
+                <button type="submit" style={{...addBtnStyle, backgroundColor: '#1a73e8'}}>{dil === 'tr' ? 'Haberi Yayınla' : 'Publish News'}</button>
+            </form>
+            </div>
         </div>
-      </div>
+      )}
 
       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '40px' }}>
         {reklamlar.map(r => (
@@ -232,15 +234,19 @@ function App() {
             <img src={r.gorselUrl || 'https://via.placeholder.com/150'} alt="reklam" style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '8px' }} />
             <h4 style={{ margin: '10px 0' }}>{r.reklamAdi}</h4>
             <p style={{ color: '#28a745', fontWeight: 'bold' }}>{r.fiyat} TL</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-              <button onClick={() => setForm(r)} style={editBtnStyle}>{t.duzenle}</button>
-              <button onClick={() => sil(r.id)} style={deleteBtnStyle}>{t.reklamSil}</button>
-            </div>
+            {/* 🔥 KRİTİK: Reklam butonları da sadece admin için */}
+            {kullanici?.email === "yusufzkrdz@gmail.com" && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                    <button onClick={() => setForm(r)} style={editBtnStyle}>{t.duzenle}</button>
+                    <button onClick={() => sil(r.id)} style={deleteBtnStyle}>{t.reklamSil}</button>
+                </div>
+            )}
           </div>
         ))}
       </div>
 
-      <HaberListesi dil={dil} tetikleyici={haberGuncellemeTetikleyici} />
+      {/* 🔥 KRİTİK: HaberListesi'ne kullanici prop'u eklendi */}
+      <HaberListesi dil={dil} tetikleyici={haberGuncellemeTetikleyici} kullanici={kullanici} />
     </div>
   );
 }
