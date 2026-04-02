@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Kayit = ({ girisEkraninaDon }) => {
-    const [form, setForm] = useState({ isim: '', soyisim: '', email: '', sifre: '', unvan: 'Yeni Yazar' });
+    // 🔥 GÜNCELLEME: Başlangıç unvanı 'Okuyucu' olarak değiştirildi
+    const [form, setForm] = useState({ isim: '', soyisim: '', email: '', sifre: '', unvan: 'Okuyucu' });
     const [mesaj, setMesaj] = useState({ tip: '', icerik: '' });
 
     const handleSubmit = async (e) => {
