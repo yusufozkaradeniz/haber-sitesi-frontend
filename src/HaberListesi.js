@@ -15,6 +15,9 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
 
     const t = tercumeler[dil];
 
+    // 🔥 ADMIN KONTROLÜ
+    const isAdmin = kullanici?.email?.toLowerCase() === "yusufzkrdz@gmail.com";
+
     const gecmisiCevirveYukle = useCallback(async () => {
         const kayitliGecmis = localStorage.getItem('okumaGecmisi');
         if (kayitliGecmis) {
@@ -208,8 +211,8 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
                         <h3 onClick={() => gecmiseEkle(h)} style={{color: '#1a73e8', margin: 0, cursor: 'pointer'}} title="Okundu olarak işaretle">
                             {h.baslik}
                         </h3>
-                        {/* 🔥 KRİTİK: Sadece admin silebilir */}
-                        {kullanici?.email?.toLowerCase() === "yusufzkrdz@gmail.com" && (
+                        {/* ✅ SADECE ADMIN SİLEBİLİR */}
+                        {isAdmin && (
                             <button onClick={() => haberSil(h.id)} style={deleteBtnStyle}>
                                 {dil === 'tr' ? '🗑️ Sil' : '🗑️ Delete'}
                             </button>
@@ -242,8 +245,8 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
                             {yorumlar[h.id] && yorumlar[h.id].map(y => (
                                 <div key={y.id} style={{ ...commentBoxStyle, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span><strong>{y.kullaniciAdi}:</strong> {y.icerik}</span>
-                                    {/* 🔥 KRİTİK: Sadece admin yorum silebilir */}
-                                    {kullanici?.email?.toLowerCase() === "yusufzkrdz@gmail.com" && (
+                                    {/* ✅ SADECE ADMIN YORUM SİLEBİLİR */}
+                                    {isAdmin && (
                                         <span 
                                             onClick={() => yorumSil(y.id, h.id)} 
                                             style={{ color: '#ff4d4d', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', padding: '0 5px' }}
