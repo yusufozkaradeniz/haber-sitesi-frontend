@@ -12,7 +12,7 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
     const [yukleniyor, setYukleniyor] = useState(false);
     const [kaydedilenHaberler, setKaydedilenHaberler] = useState([]);
     const [okumaGecmisi, setOkumaGecmisi] = useState([]);
-    // 🔥 BEĞENİ KİLİDİ: Üst üste tıklamayı engeller
+    // 🔥 BEĞENİ KİLİDİ
     const [isLiking, setIsLiking] = useState(false);
 
     const t = tercumeler[dil];
@@ -113,19 +113,17 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
         }
     };
 
-    // 🔥 GÜNCELLEME: Beğeni Kilidi Logic
+    // 🔥 GÜNCELLEME: Beğeni Kilidi
     const begen = (id) => {
-        if (isLiking) return; // Eğer işlem sürüyorsa fonksiyondan çık
-        
-        setIsLiking(true); // Kilidi kapat
+        if (isLiking) return;
+        setIsLiking(true);
         axios.post(`https://habersitesi-backend.onrender.com/api/haberler/${id}/begen`)
             .then(() => {
-                verileriGetirveCevir(); // Sayfayı güncelle
+                verileriGetirveCevir();
             })
             .catch(err => console.log(err))
             .finally(() => {
-                // Backend'den veri çekilip state güncellenene kadar bekle (yarım saniye)
-                setTimeout(() => setIsLiking(false), 500); 
+                setIsLiking(false); 
             });
     };
 
@@ -189,7 +187,6 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
                     <p style={{lineHeight: '1.6'}}>{h.icerik}</p>
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <span>❤️ <strong>{h.begeniSayisi}</strong></span>
-                        {/* 🔥 GÜNCELLEME: Buton kilidi ve opaklık */}
                         <button 
                             onClick={() => begen(h.id)} 
                             disabled={isLiking} 
