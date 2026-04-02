@@ -12,6 +12,8 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
     const [yukleniyor, setYukleniyor] = useState(false);
     const [kaydedilenHaberler, setKaydedilenHaberler] = useState([]);
     const [okumaGecmisi, setOkumaGecmisi] = useState([]);
+    // 🔥 YENİ: Beğeni işlemi sırasında butonu kilitlemek için state
+    const [isLiking, setIsLiking] = useState(false);
 
     const t = tercumeler[dil];
 
@@ -144,13 +146,19 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
         }
     };
 
+    // 🔥 GÜNCELLEME: Beğeni Kilidi eklendi
     const begen = (id) => {
+        if (isLiking) return; // Eğer işlem sürüyorsa fonksiyondan çık
+        
+        setIsLiking(true); // Kilidi kapat
         axios.post(`https://habersitesi-backend.onrender.com/api/haberler/${id}/begen`)
             .then(() => {
                 verileriGetirveCevir();
-                alert(dil === 'tr' ? "Beğenildi!" : "Liked!");
             })
-            .catch(err => console.log("Beğeni hatası:", err));
+            .catch(err => console.log("Beğeni hatası:", err))
+            .finally(() => {
+                setIsLiking(false); // İşlem bitti, kilidi aç
+            });
     };
 
     const haberKaydet = async (haberId) => {
@@ -233,7 +241,14 @@ const HaberListesi = ({ dil, tetikleyici, kullanici }) => {
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
                         <span style={{ fontSize: '1.2rem' }}>❤️ <strong>{h.begeniSayisi}</strong></span>
-                        <button onClick={() => begen(h.id)} style={actionBtnStyle}>{t.begen}</button>
+                        {/* 🔥 GÜNCELLEME: Buton isLiking durumuna göre kilitlenir */}
+                        <button 
+                            onClick={() => begen(h.id)} 
+                            disabled={isLiking} 
+                            style={{...actionBtnStyle, opacity: isLiking ? 0.6 : 1, cursor: isLiking ? 'not-allowed' : 'pointer'}}
+                        >
+                            {t.begen}
+                        </button>
                         <button onClick={() => haberKaydet(h.id)} style={{ ...actionBtnStyle, backgroundColor: '#ffd700', border: 'none' }}>
                             {t.kaydet}
                         </button>
